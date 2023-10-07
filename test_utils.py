@@ -1,4 +1,5 @@
 from utils import get_hyperparameter_combinations
+from utils import train_dev_test_split
 
 def inc(x):
     return x + 1
@@ -27,3 +28,8 @@ def test_hyparam_combinations():
     expected_param_combo_2={'gamma':0.01,'C':1}
     assert (expected_param_combo_1 in h_params_combinations) and (expected_param_combo_2 in h_params_combinations)
 
+def test_data_splitting():
+    X,y=read_digits()
+
+    X=X[:100,:]
+    y=

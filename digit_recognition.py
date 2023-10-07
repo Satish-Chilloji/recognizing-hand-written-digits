@@ -34,6 +34,8 @@ if __name__=='__main__':
     h_params['C']=C_list
     h_params_combinations=get_hyperparameter_combinations(h_params)
 
+    
+
     for test_frac, dev_frac in list_of_size:
         X_train,Y_train, X_dev, Y_dev, X_test, Y_test=train_dev_test_split(X,y,test_frac,dev_frac)
         model,gamma,C,cur_metric,train_metric=tune_hparams(X_train,Y_train,X_dev,Y_dev,list_of_all_param_combination)

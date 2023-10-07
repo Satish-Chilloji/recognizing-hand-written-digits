@@ -16,6 +16,7 @@ def train_dev_test_split(data, label, test_frac, dev_frac):
     X_train_dev, X_test, Y_train_dev, Y_test = train_test_split(
         data, label, test_size=test_frac, shuffle=True
     )
+    #train_size=1-test_frac-dev_frac
     X_train, X_dev, Y_train, Y_dev = train_test_split(
         X_train_dev, Y_train_dev, test_size=dev_frac, shuffle=True
     )
