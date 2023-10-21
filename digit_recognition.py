@@ -65,6 +65,16 @@ if __name__=='__main__':
     production_f1 = f1_score(y_test, production_predictions, average='macro')
     candidate_f1 = f1_score(y_test, candidate_predictions, average='macro')
 
+
+    # Calculate a 2x2 confusion matrix
+    TP = np.sum((production_predictions == y_test) & (candidate_predictions == y_test))
+    TN = np.sum((production_predictions != y_test) & (candidate_predictions != y_test))
+    FP = np.sum((production_predictions == y_test) & (candidate_predictions != y_test))
+    FN = np.sum((production_predictions != y_test) & (candidate_predictions == y_test))
+
+    confusion_matrix_2x2 = np.array([[TP, FP], [FN, TN]])
+
+
     # Print the results
     print(f"Production Model Accuracy: {production_accuracy:.2f}")
     print(f"Candidate Model Accuracy: {candidate_accuracy:.2f}")
@@ -72,6 +82,6 @@ if __name__=='__main__':
     print(production_confusion_matrix)
     print("Candidate Model Confusion Matrix:")
     print(candidate_confusion_matrix)
-    print(f"Samples predicted correctly in production but not in candidate: {correct_in_production_not_in_candidate}")
+    print(f"Samples predicted correctly in production but not in candidate: {confusion_matrix_2x2}")
     print(f"Production Model Macro-average F1 Score: {production_f1:.2f}")
     print(f"Candidate Model Macro-average F1 Score: {candidate_f1:.2f}")
