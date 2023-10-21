@@ -6,9 +6,8 @@ import matplotlib.pyplot as plt
 import itertools
 # Import datasets, classifiers and performance metrics
 from sklearn import datasets, metrics, svm
-from utils import tune_hparams,train_dev_test_split
+from utils import tune_hparams,train_dev_test_split,get_hyperparameter_combinations
 from sklearn import svm,metrics
-
 
 if __name__=='__main__':
     digits = datasets.load_digits()
@@ -24,10 +23,17 @@ if __name__=='__main__':
 
     list_of_all_param_combination = list(itertools.product(gamma_ranges, C_ranges))
 
-
     test_size=[0.1,0.2,0.3]
     dev_size=[0.1,0.2,0.3]
     list_of_size=list(itertools.product(test_size, dev_size))
+
+    gamma_list=[0.001,0.01,0.1,1]
+    C_list=[1,10,100,1000]
+    h_params={}
+    h_params['gamma']=gamma_list
+    h_params['C']=C_list
+    h_params_combinations=get_hyperparameter_combinations(h_params)
+
     for test_frac, dev_frac in list_of_size:
         X_train,Y_train, X_dev, Y_dev, X_test, Y_test=train_dev_test_split(X,y,test_frac,dev_frac)
         model,gamma,C,cur_metric,train_metric=tune_hparams(X_train,Y_train,X_dev,Y_dev,list_of_all_param_combination)
@@ -36,3 +42,4 @@ if __name__=='__main__':
         print(f'Train Size:{1-(test_frac+dev_frac)} Test Size:{test_frac} Dev Size:{dev_frac} Train Acc:{train_metric} Test Acc:{test_metric} Val Acc:{cur_metric}')
         print(f'Found best metric for the SVM model with gamma:{gamma} and C:{C}')
         print('\n')
+    

@@ -21,5 +21,4 @@ jobs:
       - name: Install dep
         run:  pip3 install --no-cache-dir -r requirements.txt
       - name: Run test cases
-        run:
-          python digit_recognition.py
+        run:  python quiz.py

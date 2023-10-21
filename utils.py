@@ -22,6 +22,20 @@ def train_dev_test_split(data, label, test_frac, dev_frac):
 
     return X_train,Y_train, X_dev, Y_dev, X_test, Y_test
 
+def get_combinations(param_name,param_values,base_combinations):
+    new_combinations=[]
+    for value in param_values:
+        for combinations in base_combinations:
+            combinations[param_name]=value
+            new_combinations.append(combinations.copy())
+    return new_combinations
+
+def get_hyperparameter_combinations(dict_of_param_list):
+    base_combinations=[{}]
+    for param_name, param_values in dict_of_param_list.items():
+        base_combinations=get_combinations(param_name,param_values,base_combinations)
+    return base_combinations
+
 def tune_hparams(X_train, Y_train, X_dev, Y_dev, list_of_all_param_combination):
     best_acc_so_far=-1
     best_train_metric=-1
