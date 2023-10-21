@@ -3,38 +3,46 @@
 
 # Standard scientific Python imports
 import matplotlib.pyplot as plt
+import numpy as np
 import itertools
 import pandas as pd
 # Import datasets, classifiers and performance metrics
 from sklearn import datasets, metrics, svm
 from sklearn.svm import SVC  # Import the SVC class
 from utils import tune_hparams,train_dev_test_split
-from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn.model_selection import train_test_split, GridSearchCV,RandomizedSearchCV
 from sklearn import svm,metrics
 from sklearn import tree
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import accuracy_score, confusion_matrix, f1_score
 
-
 if __name__=='__main__':
 
     # Load the MNIST dataset
-    mnist = datasets.fetch_openml("mnist_784", version=1)
-    X, y = mnist.data, mnist.target
-    X = X / 255.0  # Scale pixel values to [0, 1]
+    # mnist = datasets.fetch_openml("mnist_784", version=1)
+    # X, y = mnist.data, mnist.target
+    # X = X / 255.0  # Scale pixel values to [0, 1]
+
+    digits = datasets.load_digits()
+    # flatten the images
+    n_samples = len(digits.images)
+    data = digits.images.reshape((n_samples, -1))
+    X=data
+    y=digits.target
+
 
     # Split the data into training and testing sets
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.8, random_state=42)
 
     # Hyperparameter tuning for the production model (SVM) using GridSearchCV
     svm_param_grid = {'C': [0.1, 1, 10], 'kernel': ['linear', 'rbf']}
-    svm_grid_search = GridSearchCV(SVC(), svm_param_grid, cv=5)
+    svm_grid_search = RandomizedSearchCV(SVC(), svm_param_grid, cv=2)
     svm_grid_search.fit(X_train, y_train)
     production_model = svm_grid_search.best_estimator_
 
     # Hyperparameter tuning for the candidate model (Decision Tree) using GridSearchCV
     dt_param_grid = {'max_depth': [None, 10, 20, 30], 'min_samples_split': [2, 5, 10]}
-    dt_grid_search = GridSearchCV(DecisionTreeClassifier(), dt_param_grid, cv=5)
+    dt_grid_search = RandomizedSearchCV(DecisionTreeClassifier(), dt_param_grid, cv=2)
     dt_grid_search.fit(X_train, y_train)
     candidate_model = dt_grid_search.best_estimator_
 
