@@ -22,23 +22,38 @@ def train_dev_test_split(data, label, test_frac, dev_frac):
 
     return X_train,Y_train, X_dev, Y_dev, X_test, Y_test
 
-def tune_hparams(X_train, Y_train, X_dev, Y_dev, list_of_all_param_combination):
+def tune_hparams(X_train, Y_train, X_dev, Y_dev, list_of_all_param_combination,model_type):
     best_acc_so_far=-1
     best_train_metric=-1
-    for gamma, C in list_of_all_param_combination:
-        model=svm.SVC(C=C,gamma=gamma)
-        model.fit(X_train,Y_train)
-        predicted_dev=model.predict(X_dev)
-        cur_metric = metrics.accuracy_score(y_pred=predicted_dev, y_true=Y_dev)
-        predicted_train=model.predict(X_train)
-        train_metric = metrics.accuracy_score(y_pred=predicted_train, y_true=Y_train)
+    if model_type=='SVC':    
+        for gamma, C in list_of_all_param_combination:
+            model=svm.SVC(C=C,gamma=gamma)
+            model.fit(X_train,Y_train)
+            predicted_dev=model.predict(X_dev)
+            cur_metric = metrics.accuracy_score(y_pred=predicted_dev, y_true=Y_dev)
+            predicted_train=model.predict(X_train)
+            train_metric = metrics.accuracy_score(y_pred=predicted_train, y_true=Y_train)
+            if cur_metric > best_acc_so_far:
+                best_acc_so_far = cur_metric
+                best_train_metric = train_metric
+                best_model=model
+                b_gamma=gamma
+                b_C=C
+        return best_model,b_gamma,b_C,best_acc_so_far,best_train_metric
+    if model_type=='DT':    
+        for mac_depth in list_of_all_param_combination:
+            model=svm.SVC(C=C,gamma=gamma)
+            model.fit(X_train,Y_train)
+            predicted_dev=model.predict(X_dev)
+            cur_metric = metrics.accuracy_score(y_pred=predicted_dev, y_true=Y_dev)
+            predicted_train=model.predict(X_train)
+            train_metric = metrics.accuracy_score(y_pred=predicted_train, y_true=Y_train)
+            if cur_metric > best_acc_so_far:
+                best_acc_so_far = cur_metric
+                best_train_metric = train_metric
+                best_model=model
+                b_gamma=gamma
+                b_C=C
+        return best_model,b_gamma,b_C,best_acc_so_far,best_train_metric
 
-        if cur_metric > best_acc_so_far:
-            best_acc_so_far = cur_metric
-            best_train_metric = train_metric
-            best_model=model
-            b_gamma=gamma
-            b_C=C
-    return best_model,b_gamma,b_C,best_acc_so_far,best_train_metric
-
-    
+        
