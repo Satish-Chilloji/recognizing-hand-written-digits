@@ -1,12 +1,14 @@
 import itertools
 from sklearn.model_selection import train_test_split
 from sklearn import svm,metrics
+from sklearn import datasets
 
-def preprocess_digits(dataset):
-    n_samples = len(dataset.images)
-    data = dataset.images.reshape((n_samples, -1))
-    label = dataset.target
-    return data, 
+def read_digits():
+    digits = datasets.load_digits()
+    n_samples = len(digits.images)
+    data = digits.images.reshape((n_samples, -1))
+    label = digits.target
+    return data, label
 
 def predict_and_eval(model, X_test, y_test):
     predicted=model.predict(X_test)
@@ -16,9 +18,9 @@ def train_dev_test_split(data, label, test_frac, dev_frac):
     X_train_dev, X_test, Y_train_dev, Y_test = train_test_split(
         data, label, test_size=test_frac, shuffle=True
     )
-    #train_size=1-test_frac-dev_frac
+    dev_size = dev_frac / (1 - test_frac)
     X_train, X_dev, Y_train, Y_dev = train_test_split(
-        X_train_dev, Y_train_dev, test_size=dev_frac, shuffle=True
+        X_train_dev, Y_train_dev, test_size=dev_size, shuffle=True
     )
 
     return X_train,Y_train, X_dev, Y_dev, X_test, Y_test
