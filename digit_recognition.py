@@ -73,5 +73,5 @@ for cur_run_i in range(num_runs):
                 cur_run_results = {'model_type': model_type, 'run_index': cur_run_i, 'train_acc' : train_acc, 'dev_acc': dev_acc, 'test_acc': test_acc}
                 results.append(cur_run_results)
 
-#print(pd.DataFrame(results).groupby('model_type').describe().T)
+print(pd.DataFrame(results).groupby('model_type').describe().T)
                 
