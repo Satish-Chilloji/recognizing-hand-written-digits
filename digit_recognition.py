@@ -11,7 +11,7 @@ hand-written digits, from 0-9.
 # Author: Gael Varoquaux <gael dot varoquaux at normalesup dot org>
 # License: BSD 3 clause
 
-# Import datasets, classifiers and performance metrics
+#Import datasets, classifiers and performance metrics
 from sklearn import metrics, svm
 from utils import preprocess_data, split_data, train_model, read_digits, predict_and_eval, train_test_dev_split, get_hyperparameter_combinations, tune_hparams
 from joblib import dump, load
@@ -43,8 +43,7 @@ classifier_param_dict['tree'] = h_params_trees_combinations
 results = []
 test_sizes =  [0.2]
 dev_sizes  =  [0.2]
-for cur_run_i in range(num_runs):
-    
+for cur_run_i in range(num_runs): 
     for test_size in test_sizes:
         for dev_size in dev_sizes:
             train_size = 1- test_size - dev_size
@@ -71,6 +70,5 @@ for cur_run_i in range(num_runs):
                 print("{}\ttest_size={:.2f} dev_size={:.2f} train_size={:.2f} train_acc={:.2f} dev_acc={:.2f} test_acc={:.2f}".format(model_type, test_size, dev_size, train_size, train_acc, dev_acc, test_acc))
                 cur_run_results = {'model_type': model_type, 'run_index': cur_run_i, 'train_acc' : train_acc, 'dev_acc': dev_acc, 'test_acc': test_acc}
                 results.append(cur_run_results)
-
-#print(pd.DataFrame(results).groupby('model_type').describe().T)
+print(pd.DataFrame(results).groupby('model_type').describe().T)
                 
