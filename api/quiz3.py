@@ -9,7 +9,8 @@ def hello_world():
     return "<p>Hello, World!</p>"
 
 def compare_images_here(image1, image2):
-    best_model_path="models/tree_max_depth:100.joblib"
+    #best_model_path="models/tree_max_depth:100.joblib"
+    best_model_path="models/svm_gamma:0.0005_C:10.joblib"
     image1=np.array(image1).reshape(1,-1)
     image2=np.array(image2).reshape(1,-1)
     # Load the model
@@ -27,15 +28,6 @@ def compare_images_here(image1, image2):
 
 @app.route('/compare_images', methods=['POST'])
 def compare_images():
-    # if 'image1' not in request.files or 'image2' not in request.files:
-    #     return ({'error': 'Both images are required'}), 400
-
-    # image1 = request.files['image1']
-    # image2 = request.files['image2']
-
-    # result = compare_images(image1, image2)
-    # return ({'are_images_same': result})
-
     data = request.get_json()
     if 'image1' in data and 'image2' in data:
         image1 = data['image1']
