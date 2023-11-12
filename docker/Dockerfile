@@ -8,7 +8,7 @@ COPY . /digit/
 RUN pip install -r /digit/requirements.txt
 # COPY requirements.txt /requirements.txt
 #RUN ["cd", "/digit"]
-ENV FLASK_APP=api/app
+ENV FLASK_APP=api/app.py
 CMD ["python","-m","flask","run","--host=0.0.0.0"]
 #CMD ["python","-m","flask","run"]
 # VOLUME /digit/models
