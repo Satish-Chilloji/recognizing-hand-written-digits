@@ -1,5 +1,7 @@
 from utils import get_hyperparameter_combinations, train_test_dev_split,read_digits, tune_hparams, preprocess_data
 import os
+
+
 def test_for_hparam_cominations_count():
     # a test case to check that all possible combinations of paramers are indeed generated
     gamma_list = [0.001, 0.01, 0.1, 1]
@@ -10,6 +12,7 @@ def test_for_hparam_cominations_count():
     h_params_combinations = get_hyperparameter_combinations(h_params)
     
     assert len(h_params_combinations) == len(gamma_list) * len(C_list)
+    #assert len(h_params_combinations) == 9
 
 def create_dummy_hyperparameter():
     gamma_list = [0.001, 0.01]
@@ -19,6 +22,7 @@ def create_dummy_hyperparameter():
     h_params['C'] = C_list
     h_params_combinations = get_hyperparameter_combinations(h_params)
     return h_params_combinations
+
 def create_dummy_data():
     X, y = read_digits()
     
@@ -31,6 +35,7 @@ def create_dummy_data():
     X_dev = preprocess_data(X_dev)
 
     return X_train, y_train, X_dev, y_dev
+
 def test_for_hparam_cominations_values():    
     h_params_combinations = create_dummy_hyperparameter()
     
@@ -59,6 +64,6 @@ def test_data_splitting():
 
     X_train, X_test, X_dev, y_train, y_test, y_dev = train_test_dev_split(X, y, test_size=test_size, dev_size=dev_size)
 
-    assert (len(X_train) == 32) 
+    assert (len(X_train) == 30) 
     assert (len(X_test) == 10)
     assert  ((len(X_dev) == 60))
