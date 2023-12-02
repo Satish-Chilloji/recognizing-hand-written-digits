@@ -19,7 +19,7 @@ import pandas as pd
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--model",type=str, help = "Model choices = {svm, tree}", default = "svm",)
+parser.add_argument("--model",type=str, help = "Model choices = {svm, tree}", default = "svm,tree",)
 parser.add_argument("--test_sizes", type=float,help="test size", default=0.2)
 parser.add_argument("--dev_sizes", type=float,help="dev size", default=0.2)
 parser.add_argument("--max_run", type=int,help="test size", default=5)
