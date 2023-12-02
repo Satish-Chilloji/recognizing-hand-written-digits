@@ -1,8 +1,11 @@
 from sklearn.model_selection import train_test_split
 from sklearn import svm, tree, datasets, metrics
+from sklearn.linear_model import LogisticRegression
 from joblib import dump, load
+from sklearn.preprocessing import StandardScaler
 # we will put all utils here
 
+roll_number='M22AIE242'
 def get_combinations(param_name, param_values, base_combinations):    
     new_combinations = []
     for value in param_values:
@@ -28,7 +31,8 @@ def tune_hparams(X_train, y_train, X_dev, y_dev, h_params_combinations, model_ty
         if cur_accuracy > best_accuracy:
             best_accuracy = cur_accuracy
             best_hparams = h_params
-            best_model_path = "./models/{}_".format(model_type) +"_".join(["{}:{}".format(k,v) for k,v in h_params.items()]) + ".joblib"
+            best_model_path = "./models/{}_".format(model_type)+"M22AIE242_"+"_".join(["{}:{}".format(k,v) for k,v in h_params.items()]) + ".joblib"
+            #best_model_path = "./models/{}_".format(model_type) +"_".join(["{}:{}".format(k,v) for k,v in h_params.items()]) + ".joblib"
             best_model = model
     # save the best_model    
     dump(best_model, best_model_path)
@@ -44,7 +48,9 @@ def preprocess_data(data):
     # flatten the images
     n_samples = len(data)
     data = data.reshape((n_samples, -1))
-    return data
+    unit_scaler=StandardScaler()
+    data_normalized=unit_scaler.fit_transform(data)
+    return data_normalized
 
 # Split data into 50% train and 50% test subsets
 def split_data(x, y, test_size, random_state=1):
@@ -61,6 +67,9 @@ def train_model(x, y, model_params, model_type="svm"):
     if model_type == "tree":
         # Create a classifier: a decision tree classifier
         clf = tree.DecisionTreeClassifier
+    if model_type == "logit":
+        # Create a classifier: a decision tree classifier
+        clf = LogisticRegression
     model = clf(**model_params)
     # train the model
     model.fit(x, y)

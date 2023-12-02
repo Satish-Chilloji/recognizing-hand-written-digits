@@ -18,6 +18,8 @@ jobs:
         run: |
           ls -r ${{ github.workspace }}
       - run: echo "🍏 This job's status is ${{ job.status }}."
-      - name: Run Docker Image and Save the model
+      - name: Install dep
+        run: pip3 install --no-cache-dir -r requirements.txt
+      - name: Run test cases
         run:
-          ./docker_run.sh
+          python digit_recognition.py

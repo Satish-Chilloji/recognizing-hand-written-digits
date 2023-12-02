@@ -13,6 +13,7 @@ hand-written digits, from 0-9.
 
 #Import datasets, classifiers and performance metrics
 from sklearn import metrics, svm
+from sklearn.linear_model import LogisticRegression
 from utils import preprocess_data, split_data, train_model, read_digits, predict_and_eval, train_test_dev_split, get_hyperparameter_combinations, tune_hparams
 from joblib import dump, load
 import pandas as pd
@@ -58,6 +59,12 @@ h_params_tree['criterion'] = criterion
 h_params_trees_combinations = get_hyperparameter_combinations(h_params_tree)
 classifier_param_dict['tree'] = h_params_trees_combinations
 
+# 2.2 Logistic Regression
+solver=['lbfgs','liblinear','newton-cg','newton-cholesky', 'sag', 'saga']
+h_params_log={}
+h_params_log['solver']=solver
+h_params_log_combinations = get_hyperparameter_combinations(h_params_log)
+classifier_param_dict['logit'] = h_params_log_combinations
 
 for cur_run_i in range(max_run): 
     for test_size in test_sizes:
