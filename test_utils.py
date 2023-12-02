@@ -59,6 +59,6 @@ def test_data_splitting():
 
     X_train, X_test, X_dev, y_train, y_test, y_dev = train_test_dev_split(X, y, test_size=test_size, dev_size=dev_size)
 
-    assert (len(X_train) == 30) 
+    assert (len(X_train) == 32) 
     assert (len(X_test) == 10)
     assert  ((len(X_dev) == 60))

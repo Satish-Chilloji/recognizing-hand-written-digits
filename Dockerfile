@@ -14,4 +14,4 @@ ENV FLASK_APP=api/assignment4.py
 CMD ["python", "api/assignment4.py"]
 #CMD ["python","-m","flask","run"]
 # VOLUME /digit/models
-# CMD ["python","digit_recognition.py"]x
+# CMD ["python","digit_recognition.py"]

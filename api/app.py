@@ -9,7 +9,8 @@ def hello_world():
 @app.route("/sum/<x>/<y>")
 def sum(x,y):
     sum_=int(x)+int(y)
-    return str(sum_) 
+    return str(sum_
+               ) 
 
 @app.route('/inference', methods=['POST'])
 def inference():
