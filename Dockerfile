@@ -1,5 +1,5 @@
 # Use the previously built Dependency Image as the base
-FROM base:latest
+FROM baseimage:latest
 
 # Set the working directory
 WORKDIR /digit

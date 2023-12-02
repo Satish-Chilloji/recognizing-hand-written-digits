@@ -23,6 +23,9 @@ docker build -t dependency-image -f DependencyDockerfile .
 
 docker build -t final-image -f FinalDockerfile .
 
+docker run -it final-image
+
+
 # Azure Login
 az login --use-device
 
