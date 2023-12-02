@@ -49,8 +49,12 @@ classifier_param_dict['svm'] = h_params_combinations
 
 # 2.2 Decision Tree
 max_depth_list = [5, 10, 15, 20, 50, 100]
+min_samples_split = [2,5,10]
+criterion = ["gini","entropy","log_loss"]
 h_params_tree = {}
 h_params_tree['max_depth'] = max_depth_list
+h_params_tree['min_samples_split'] = min_samples_split
+h_params_tree['criterion'] = criterion
 h_params_trees_combinations = get_hyperparameter_combinations(h_params_tree)
 classifier_param_dict['tree'] = h_params_trees_combinations
 
