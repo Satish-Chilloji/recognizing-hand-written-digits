@@ -16,8 +16,23 @@ from sklearn import metrics, svm
 from utils import preprocess_data, split_data, train_model, read_digits, predict_and_eval, train_test_dev_split, get_hyperparameter_combinations, tune_hparams
 from joblib import dump, load
 import pandas as pd
+import argparse
 
-num_runs  = 5
+parser = argparse.ArgumentParser()
+parser.add_argument("--model",type=str, help = "Model choices = {svm, tree}", default = "svm",)
+parser.add_argument("--test_sizes", type=float,help="test size", default=0.2)
+parser.add_argument("--dev_sizes", type=float,help="dev size", default=0.2)
+parser.add_argument("--max_run", type=int,help="test size", default=5)
+args = parser.parse_args()
+
+
+results = []
+test_sizes =  [args.test_sizes]
+dev_sizes  =  [args.dev_sizes]
+model_ = args.model.split(",")
+model_types= [i for i in model_ if i!= ","]
+max_run = args.max_run
+
 # 1. Get the dataset
 X, y = read_digits()
 
@@ -40,10 +55,7 @@ h_params_trees_combinations = get_hyperparameter_combinations(h_params_tree)
 classifier_param_dict['tree'] = h_params_trees_combinations
 
 
-results = []
-test_sizes =  [0.2]
-dev_sizes  =  [0.2]
-for cur_run_i in range(num_runs): 
+for cur_run_i in range(max_run): 
     for test_size in test_sizes:
         for dev_size in dev_sizes:
             train_size = 1- test_size - dev_size
@@ -55,7 +67,7 @@ for cur_run_i in range(num_runs):
             X_dev = preprocess_data(X_dev)
 
 
-            for model_type in classifier_param_dict:
+            for model_type in model_types:
                 current_hparams = classifier_param_dict[model_type]
                 best_hparams, best_model_path, best_accuracy  = tune_hparams(X_train, y_train, X_dev, 
                 y_dev, current_hparams, model_type)        
@@ -70,5 +82,7 @@ for cur_run_i in range(num_runs):
                 print("{}\ttest_size={:.2f} dev_size={:.2f} train_size={:.2f} train_acc={:.2f} dev_acc={:.2f} test_acc={:.2f}".format(model_type, test_size, dev_size, train_size, train_acc, dev_acc, test_acc))
                 cur_run_results = {'model_type': model_type, 'run_index': cur_run_i, 'train_acc' : train_acc, 'dev_acc': dev_acc, 'test_acc': test_acc}
                 results.append(cur_run_results)
+# import pdb
+# pdb.set_trace()
 print(pd.DataFrame(results).groupby('model_type').describe().T)
                 
