@@ -17,6 +17,12 @@ docker build -t digit:v1 -f docker/Dockerfile .
 # Run Docker
 docker run -it -p 8000:80 digit:v1
 
+
+# Build Docker
+docker build -t dependency-image -f DependencyDockerfile .
+
+docker build -t final-image -f FinalDockerfile .
+
 # Azure Login
 az login --use-device
 
