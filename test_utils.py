@@ -1,6 +1,6 @@
 from utils import get_hyperparameter_combinations, train_test_dev_split,read_digits, tune_hparams, preprocess_data
 import os
-
+from joblib import dump, load
 
 def test_for_hparam_cominations_count():
     # a test case to check that all possible combinations of paramers are indeed generated
@@ -15,13 +15,12 @@ def test_for_hparam_cominations_count():
     #assert len(h_params_combinations) == 9
 
 def create_dummy_hyperparameter():
-    gamma_list = [0.001, 0.01]
-    C_list = [1]
-    h_params={}
-    h_params['gamma'] = gamma_list
-    h_params['C'] = C_list
-    h_params_combinations = get_hyperparameter_combinations(h_params)
-    return h_params_combinations
+    solver=['lbfgs','liblinear','newton-cg','newton-cholesky', 'sag', 'saga']
+    h_params_log={}
+    h_params_log['solver']=solver
+    h_params_log_combinations = get_hyperparameter_combinations(h_params_log)
+    return h_params_log_combinations
+
 
 def create_dummy_data():
     X, y = read_digits()
@@ -39,19 +38,33 @@ def create_dummy_data():
 def test_for_hparam_cominations_values():    
     h_params_combinations = create_dummy_hyperparameter()
     
-    expected_param_combo_1 = {'gamma': 0.001, 'C': 1}
-    expected_param_combo_2 = {'gamma': 0.01, 'C': 1}
+    expected_param_combo_1 = {'solver': 'lbfgs'}
 
-    assert (expected_param_combo_1 in h_params_combinations) and (expected_param_combo_2 in h_params_combinations)
+    assert (expected_param_combo_1 in h_params_combinations)
 
 def test_model_saving():
     X_train, y_train, X_dev, y_dev = create_dummy_data()
     h_params_combinations = create_dummy_hyperparameter()
 
     _, best_model_path, _ = tune_hparams(X_train, y_train, X_dev, 
-        y_dev, h_params_combinations)   
+        y_dev, h_params_combinations)
 
     assert os.path.exists(best_model_path)
+
+def test_logit_model():
+    X_train, y_train, X_dev, y_dev = create_dummy_data()
+    h_params_combinations = create_dummy_hyperparameter()
+    _, best_model_path, _ = tune_hparams(X_train, y_train, X_dev, y_dev, h_params_combinations)
+    assert 'logit' in best_model_path
+
+def test_logit_solver_name():
+    X_train, y_train, X_dev, y_dev = create_dummy_data()
+    h_params_combinations = create_dummy_hyperparameter()
+    _, best_model_path, _ = tune_hparams(X_train, y_train, X_dev, y_dev, h_params_combinations)
+    print(best_model_path)
+    best_model = load(best_model_path)
+    parmas=best_model.get_params()
+    assert parmas['solver'] in ['lbfgs','liblinear','newton-cg','newton-cholesky', 'sag', 'saga']
 
 def test_data_splitting():
     X, y = read_digits()

@@ -20,7 +20,7 @@ def get_hyperparameter_combinations(dict_of_param_lists):
         base_combinations = get_combinations(param_name, param_values, base_combinations)
     return base_combinations
 
-def tune_hparams(X_train, y_train, X_dev, y_dev, h_params_combinations, model_type="svm"):
+def tune_hparams(X_train, y_train, X_dev, y_dev, h_params_combinations, model_type="logit"):
     best_accuracy = -1
     best_model_path = ""
     for h_params in h_params_combinations:
@@ -60,7 +60,7 @@ def split_data(x, y, test_size, random_state=1):
     return X_train, X_test, y_train, y_test
 
 # train the model of choice with the model prameter
-def train_model(x, y, model_params, model_type="svm"):
+def train_model(x, y, model_params, model_type="logit"):
     if model_type == "svm":
         # Create a classifier: a support vector classifier
         clf = svm.SVC
